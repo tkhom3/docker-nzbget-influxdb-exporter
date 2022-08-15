@@ -1,1 +1,2 @@
-# docker-nzbget-influxdb-exporter-
+# docker-nzbget-influxdb-exporter
+Export NZBget metrics to InfluxDB
