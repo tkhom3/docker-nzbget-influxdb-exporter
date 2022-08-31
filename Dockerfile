@@ -1,7 +1,9 @@
 FROM alpine:3.16.2
 
-RUN apk update && \
-    apk add --no-cache bash py3-pip python3
+RUN apk update && apk add --no-cache \
+  bash=5.1.16-r2 \
+  py3-pip=22.1.1-r0 \
+  python3=3.10.5-r0 
 
 ADD run.sh /
 ADD requirements.txt /
