@@ -1,29 +1,21 @@
 FROM alpine:3.16.2
 
-ENV USER=docker
-ENV UID=12345
-ENV GID=23456
+RUN addgroup -S appgroup && adduser -S influx -G influx
 
-WORKDIR /tmp
-
-RUN adduser \
-    --disabled-password \
-    --home "$(pwd)" \
-    --ingroup "$USER" \
-    --no-create-home \
-    --uid "$UID" \
-    "$USER"
+WORKDIR /tmp/
 
 RUN apk update && apk add --no-cache \
   bash=5.1.16-r2 \
   py3-pip=22.1.1-r0 \
   python3=3.10.5-r0 
 
+USER influx
+
 COPY run.sh .
 COPY requirements.txt .
 COPY export.py .
 
-RUN ["chmod", "+x", "/run.sh"]
+RUN ["chmod", "+x", "run.sh"]
 
 RUN pip3 install -r requirements.txt && \
     rm -rf /tmp/pip_build_root/
@@ -46,5 +38,5 @@ ENV INFLUXDB_URL_SSL $INFLUXDB_URL_SSL
 ENV INFLUXDB_PORT $INFLUXDB_PORT
 ENV INFLUXDB_BUCKET $INFLUXDB_BUCKET
 
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["./run.sh"]
 CMD ["start"]
