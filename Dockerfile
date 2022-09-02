@@ -1,13 +1,27 @@
 FROM alpine:3.16.2
 
+ENV USER=docker
+ENV UID=12345
+ENV GID=23456
+
+WORKDIR /tmp
+
+RUN adduser \
+    --disabled-password \
+    --home "$(pwd)" \
+    --ingroup "$USER" \
+    --no-create-home \
+    --uid "$UID" \
+    "$USER"
+
 RUN apk update && apk add --no-cache \
   bash=5.1.16-r2 \
   py3-pip=22.1.1-r0 \
   python3=3.10.5-r0 
 
-ADD run.sh /
-ADD requirements.txt /
-ADD export.py /
+COPY run.sh .
+COPY requirements.txt .
+COPY export.py .
 
 RUN ["chmod", "+x", "/run.sh"]
 
