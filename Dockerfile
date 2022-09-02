@@ -15,7 +15,7 @@ COPY run.sh .
 COPY requirements.txt .
 COPY export.py .
 
-RUN ["chmod", "+x", "run.sh"]
+RUN ["chmod", "+x", "./run.sh"]
 
 RUN pip3 install -r requirements.txt && \
     rm -rf /tmp/pip_build_root/
@@ -38,5 +38,5 @@ ENV INFLUXDB_URL_SSL $INFLUXDB_URL_SSL
 ENV INFLUXDB_PORT $INFLUXDB_PORT
 ENV INFLUXDB_BUCKET $INFLUXDB_BUCKET
 
-ENTRYPOINT ["run.sh"]
+ENTRYPOINT ["./run.sh"]
 CMD ["start"]
