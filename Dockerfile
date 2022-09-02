@@ -1,6 +1,6 @@
 FROM alpine:3.16.2
 
-RUN addgroup -S appgroup && adduser -S influx -G influx
+RUN addgroup -S influx && adduser -S influx -G influx
 
 WORKDIR /tmp/
 
