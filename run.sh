@@ -22,7 +22,7 @@ elif [[ "$OPTION" = "run" ]]; then
     touch "$LOCKFILE"
   fi
 
-  python3 /export.py 2>&1 | tee -a "$LOG_FILE"
+  python3 "$HOME/export.py" 2>&1 | tee -a "$LOG_FILE"
   rm -f "$LOCKFILE"
 
 else

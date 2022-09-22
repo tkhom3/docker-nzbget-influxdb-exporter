@@ -1,3 +1,5 @@
+#https://prospector.landscape.io/en/latest/profiles.html#enabling-and-disabling-tools
+
 output-format: grouped
 
 strictness: veryhigh
