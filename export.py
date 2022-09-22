@@ -66,14 +66,20 @@ def collect_metrics():
 
 
 if __name__ == '__main__':
-    starttime = time.time() # pylint: disable=invalid-name
+    STARTTIME = time.time()
+    RUNNING = False
     while True:
-        try:
-            collect_metrics()
-        except Exception as error: # pylint: disable=broad-except
-            if 'No host supplied' in str(error):
+        if not RUNNING:
+            RUNNING = True
+            try:
+                collect_metrics()
+                RUNNING = False
+            except Exception as error: # pylint: disable=broad-except
+                if 'No host supplied' in str(error):
+                    print(f'ERROR: {error}')
+                    print(
+                        'Please check environment variables and ensure a valid host is being set.')
+                    break
                 print(f'ERROR: {error}')
-                print('Please check environment variables and ensure a valid host is being set.')
                 break
-            print(f'ERROR: {error}')
-        time.sleep(60.0 - ((time.time() - starttime) % 60.0))
+        time.sleep(60.0 - ((time.time() - STARTTIME) % 60.0))
