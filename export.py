@@ -1,11 +1,12 @@
 '''Retrieve NZBGet metrics via API and send to InfluxDB'''
 
 import os
+import time
 import requests
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-class NZBGet:
+class NZBGet: # pylint: disable=too-few-public-methods
     '''Class for NZBGet.'''
     def __init__(self) -> None:
         self.username = os.getenv('NZBGET_USERNAME')
@@ -59,8 +60,20 @@ class InfluxDB:
             write_api.write(bucket=self.bucket, record=key_point)
 
 
+def collect_metrics():
+    '''Calls write_to_influxdb'''
+    return InfluxDB().write_to_influxdb()
+
+
 if __name__ == '__main__':
-    try:
-        InfluxDB().write_to_influxdb()
-    except Exception as error:
-        print(f'ERROR: {error}')
+    starttime = time.time() # pylint: disable=invalid-name
+    while True:
+        try:
+            collect_metrics()
+        except Exception as error: # pylint: disable=broad-except
+            if 'No host supplied' in str(error):
+                print(f'ERROR: {error}')
+                print('Please check environment variables and ensure a valid host is being set.')
+                break
+            print(f'ERROR: {error}')
+        time.sleep(60.0 - ((time.time() - starttime) % 60.0))

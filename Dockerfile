@@ -1,9 +1,11 @@
-FROM alpine:3.16.2
+FROM python:3.10.7
 
-ARG USER=root
-ARG GROUP=root
+ARG USER=user
+ARG GROUP=$USER
+ENV HOME=/home/$USER
 
-ENV HOME=/$USER
+RUN addgroup --system $GROUP && adduser --system --home $HOME --ingroup $GROUP $USER
+
 ENV CRON_SCHEDULE="* * * * *"
 ENV LOG_FILE="/tmp/influxdb-export.log"
 
@@ -23,21 +25,17 @@ ENV INFLUXDB_URL_SSL="http"
 ENV INFLUXDB_PORT="8086"
 ENV INFLUXDB_BUCKET=
 
-RUN apk update && apk add --no-cache \
-  bash=5.1.16-r2 \
-  py3-pip=22.1.1-r0 \
-  python3=3.10.5-r0 
-
 WORKDIR $HOME
 
 COPY --chown=$USER:$GROUP requirements.txt .
 COPY --chown=$USER:$GROUP export.py .
-COPY --chown=$USER:$GROUP run.sh .
+# COPY --chown=$USER:$GROUP run.sh .
 
 RUN chmod 400 requirements.txt && \
-    chmod 500 run.sh export.py
+    chmod 500 export.py
+
+USER $USER
 
 RUN pip install -r requirements.txt --no-cache-dir
 
-ENTRYPOINT ["sh", "run.sh"]
-CMD ["start"]
+ENTRYPOINT ["python3", "export.py"]
