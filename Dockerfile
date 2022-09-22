@@ -6,24 +6,24 @@ ENV HOME=/home/$USER
 
 RUN addgroup --system $GROUP && adduser --system --home $HOME --ingroup $GROUP $USER
 
-ENV CRON_SCHEDULE="* * * * *"
-ENV LOG_FILE="/tmp/influxdb-export.log"
+ENV CRON_SCHEDULE="* * * * *" \
+    LOG_FILE="/tmp/influxdb-export.log"
 
 # NZBGet Variables
-ENV NZBGET_USERNAME="influxdb"
-ENV NZBGET_PASSWORD=
-ENV NZBGET_URL=
-ENV NZBGET_URL_SSL="http"
-ENV NZBGET_PORT="6789"
-ENV NZBGET_VALUES_TO_RETURN="RemainingSizeMB,ForcedSizeMB,DownloadedSizeMB,ArticleCacheMB,DownloadRate,ThreadCount,PostJobCount"
+ENV NZBGET_USERNAME="influxdb" \
+    NZBGET_PASSWORD= \
+    NZBGET_URL= \
+    NZBGET_URL_SSL="http" \
+    NZBGET_PORT="6789" \
+    NZBGET_VALUES_TO_RETURN="RemainingSizeMB,ForcedSizeMB,DownloadedSizeMB,ArticleCacheMB,DownloadRate,ThreadCount,PostJobCount"
 
 # InfluxDB Variables
-ENV INFLUXDB_TOKEN=
-ENV INFLUXDB_ORG=
-ENV INFLUXDB_URL=
-ENV INFLUXDB_URL_SSL="http"
-ENV INFLUXDB_PORT="8086"
-ENV INFLUXDB_BUCKET=
+ENV INFLUXDB_TOKEN= \
+    INFLUXDB_ORG= \
+    INFLUXDB_URL= \
+    INFLUXDB_URL_SSL="http" \
+    INFLUXDB_PORT="8086" \
+    INFLUXDB_BUCKET=
 
 WORKDIR $HOME
 
