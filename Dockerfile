@@ -1,36 +1,43 @@
 FROM alpine:3.16.2
 
+ARG USER=root
+ARG GROUP=root
+
+ENV HOME=/$USER
+ENV CRON_SCHEDULE="* * * * *"
+ENV LOG_FILE="/tmp/influxdb-export.log"
+
+# NZBGet Variables
+ENV NZBGET_USERNAME="influxdb"
+ENV NZBGET_PASSWORD=
+ENV NZBGET_URL=
+ENV NZBGET_URL_SSL="http"
+ENV NZBGET_PORT="6789"
+ENV NZBGET_VALUES_TO_RETURN="RemainingSizeMB,ForcedSizeMB,DownloadedSizeMB,ArticleCacheMB,DownloadRate,ThreadCount,PostJobCount"
+
+# InfluxDB Variables
+ENV INFLUXDB_TOKEN=
+ENV INFLUXDB_ORG=
+ENV INFLUXDB_URL=
+ENV INFLUXDB_URL_SSL="http"
+ENV INFLUXDB_PORT="8086"
+ENV INFLUXDB_BUCKET=
+
 RUN apk update && apk add --no-cache \
   bash=5.1.16-r2 \
   py3-pip=22.1.1-r0 \
   python3=3.10.5-r0 
 
-ADD run.sh /
-ADD requirements.txt /
-ADD export.py /
+WORKDIR $HOME
 
-RUN ["chmod", "+x", "/run.sh"]
+COPY --chown=$USER:$GROUP requirements.txt .
+COPY --chown=$USER:$GROUP export.py .
+COPY --chown=$USER:$GROUP run.sh .
 
-RUN pip3 install -r requirements.txt && \
-    rm -rf /tmp/pip_build_root/
+RUN chmod 400 requirements.txt && \
+    chmod 500 run.sh export.py
 
-ENV CRON_SCHEDULE $CRON_SCHEDULE
+RUN pip install -r requirements.txt --no-cache-dir
 
-# NZBGet Variables
-ENV NZBGET_USERNAME $NZBGET_USERNAME
-ENV NZBGET_PASSWORD $NZBGET_PASSWORD
-ENV NZBGET_URL $NZBGET_URL
-ENV NZBGET_URL_SSL $NZBGET_URL_SSL
-ENV NZBGET_PORT $NZBGET_PORT
-ENV NZBGET_VALUES_TO_RETURN $NZBGET_VALUES_TO_RETURN
-
-# InfluxDB Variables
-ENV INFLUXDB_TOKEN $INFLUXDB_TOKEN
-ENV INFLUXDB_ORG $INFLUXDB_ORG
-ENV INFLUXDB_URL $INFLUXDB_URL
-ENV INFLUXDB_URL_SSL $INFLUXDB_URL_SSL
-ENV INFLUXDB_PORT $INFLUXDB_PORT
-ENV INFLUXDB_BUCKET $INFLUXDB_BUCKET
-
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["sh", "run.sh"]
 CMD ["start"]
