@@ -9,12 +9,14 @@ Export NZBget metrics to InfluxDBv2 Bucket
 ## Environment Variables
 
 ### General
+
 | **Variable**  | **Default** | **Description** |
 |-|-|-|
 | CRON_SCHEDULE | `* * * * *` | How often a backup should be run using CRON |
 | LOG_FILE | `/tmp/influxdb-export.log` | Location to write the log file |
 
 ### NZBGet
+
 | **Variable**  | **Default** | **Description** |
 |-|-|-|
 | NZBGET_URL | | URL for NZBGet |
@@ -25,6 +27,7 @@ Export NZBget metrics to InfluxDBv2 Bucket
 | NZBGET_VALUES_TO_RETURN | `RemainingSizeMB,ForcedSizeMB,DownloadedSizeMB,ArticleCacheMB,DownloadRate,ThreadCount,PostJobCount` | Values to return |
 
 ### Influx DB
+
 | **Variable**  | **Default** | **Description** |
 |-|-|-|
 | INFLUXDB_URL | | InfluxDB URL |
