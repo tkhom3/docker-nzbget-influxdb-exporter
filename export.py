@@ -1,4 +1,4 @@
-'''Retrieve NZBGet metrics via API and send to InfluxDB'''
+"""Retrieve NZBGet metrics via API and send to InfluxDB"""
 
 import os
 import time
@@ -6,8 +6,9 @@ import requests
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-class NZBGet: # pylint: disable=too-few-public-methods
-    '''Class for NZBGet.'''
+
+class NZBGet:  # pylint: disable=too-few-public-methods
+    """Class for NZBGet."""
     def __init__(self) -> None:
         self.username = os.getenv('NZBGET_USERNAME')
         self.password = os.getenv('NZBGET_PASSWORD')
@@ -17,7 +18,7 @@ class NZBGet: # pylint: disable=too-few-public-methods
         self.values_to_return = os.getenv('NZBGET_VALUES_TO_RETURN').split(',')
 
     def get_nzb_status_metrics(self, api_endpoint):
-        ''' Retrieves metrics from NZBGet.'''
+        """ Retrieves metrics from NZBGet."""
 
         nzbget_endpoint = f'{self.url_ssl}://{self.username}:{self.password}@{self.url}:' \
                           f'{self.port}/jsonrpc/{api_endpoint}'
@@ -29,7 +30,7 @@ class NZBGet: # pylint: disable=too-few-public-methods
 
 
 class InfluxDB:
-    '''Class for InfluxDB.'''
+    """Class for InfluxDB."""
     def __init__(self) -> None:
         self.token = os.getenv('INFLUXDB_TOKEN')
         self.org = os.getenv('INFLUXDB_ORG')
@@ -39,7 +40,7 @@ class InfluxDB:
         self.bucket = os.getenv('INFLUXDB_BUCKET')
 
     def get_influxdb_client(self):
-        '''Gets an API client for InfluxDB.'''
+        """Gets an API client for InfluxDB."""
         return InfluxDBClient(
             url=f'{self.url_ssl}://{self.url}:{self.port}',
             token=self.token,
@@ -47,7 +48,7 @@ class InfluxDB:
         )
 
     def write_to_influxdb(self):
-        '''Writes metrics to InfluxDB.'''
+        """Writes metrics to InfluxDB."""
 
         client = self.get_influxdb_client()
         endpoint = 'status'
@@ -61,7 +62,7 @@ class InfluxDB:
 
 
 def collect_metrics():
-    '''Calls write_to_influxdb'''
+    """Calls write_to_influxdb"""
     return InfluxDB().write_to_influxdb()
 
 
@@ -74,7 +75,7 @@ if __name__ == '__main__':
             try:
                 collect_metrics()
                 RUNNING = False
-            except Exception as error: # pylint: disable=broad-except
+            except Exception as error:  # pylint: disable=broad-except
                 if 'No host supplied' in str(error):
                     print(f'ERROR: {error}')
                     print(
