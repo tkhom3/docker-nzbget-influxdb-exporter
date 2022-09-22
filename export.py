@@ -1,4 +1,4 @@
-"""Retrieve NZBGet metrics via API and send to InfluxDB"""
+"""Retrieve NZBGet metrics via API and send to InfluxDB."""
 
 import os
 import time
@@ -22,7 +22,7 @@ class NZBGet:  # pylint: disable=too-few-public-methods
         """ Retrieves metrics from NZBGet."""
         nzbget_endpoint = f'{self.url_ssl}://{self.username}:{self.password}@{self.url}:' \
                           f'{self.port}/jsonrpc/{api_endpoint}'
-        response = requests.get(nzbget_endpoint)
+        response = requests.get(nzbget_endpoint, timeout=45)
         result = response.json().get('result')
         for key in [key for key in result if key not in self.values_to_return]:
             del result[key]
