@@ -4,7 +4,7 @@
 
 # docker-nzbget-influxdb-exporter
 
-Export NZBget metrics to InfluxDBv2 Bucket
+Export NZBget metrics to InfluxDBv2 bucket.
 
 ## Environment Variables
 
