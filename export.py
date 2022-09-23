@@ -7,7 +7,7 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 
-class NZBGet:  # pylint: disable=too-few-public-methods
+class NZBGet:
 
     """Class for NZBGet."""
     def __init__(self) -> None:
@@ -75,7 +75,7 @@ if __name__ == '__main__':
             try:
                 collect_metrics()
                 RUNNING = False
-            except Exception as error:  # pylint: disable=broad-except
+            except Exception as error:
                 if 'No host supplied' in str(error):
                     print(f'ERROR: {error}')
                     print(
