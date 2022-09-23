@@ -1,4 +1,4 @@
-"""Retrieve NZBGet metrics via API and send to InfluxDB."""
+"""Retrieve NZBGet metrics via API and send to InfluxDB version 2."""
 
 import os
 import time
