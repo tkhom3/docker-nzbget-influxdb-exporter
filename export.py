@@ -8,7 +8,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 
 
 class NZBGet:
-
+    
     """Class for NZBGet."""
     def __init__(self) -> None:
         self.username = os.getenv('NZBGET_USERNAME')
@@ -30,7 +30,7 @@ class NZBGet:
 
 
 class InfluxDB:
-
+    
     """Class for InfluxDB."""
     def __init__(self) -> None:
         self.token = os.getenv('INFLUXDB_TOKEN')
