@@ -7,7 +7,8 @@ ENV HOME=/home/$USER
 RUN addgroup --system $GROUP && adduser --system --home $HOME --ingroup $GROUP $USER
 
 ENV CRON_SCHEDULE="* * * * *" \
-    LOG_FILE="/tmp/influxdb-export.log"
+    LOG_FILE="/tmp/influxdb-export.log" \
+    LOG_LEVEL="INFO"
 
 # NZBGet Variables
 ENV NZBGET_USERNAME="influxdb" \
@@ -29,7 +30,6 @@ WORKDIR $HOME
 
 COPY --chown=$USER:$GROUP requirements.txt .
 COPY --chown=$USER:$GROUP export.py .
-# COPY --chown=$USER:$GROUP run.sh .
 
 RUN chmod 400 requirements.txt && \
     chmod 500 export.py

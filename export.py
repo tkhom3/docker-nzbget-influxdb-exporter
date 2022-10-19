@@ -1,7 +1,10 @@
 """Retrieve NZBGet metrics via API and send to InfluxDB version 2."""
 
 import os
+from os import path
 import time
+import logging
+import logging.config
 import requests
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -67,24 +70,33 @@ def collect_metrics():
 
 
 if __name__ == '__main__':
+    log_file_path = path.join(path.dirname(path.abspath(__file__)), 'logging.conf')
+    logging.config.fileConfig(log_file_path)
+    logger = logging.getLogger(__name__)
+    level = logging.getLevelName(os.getenv('LOG_LEVEL'))
+    logger.setLevel(level)
+
     STARTTIME = time.time()
     RUNNING = False
     while True:
         if not RUNNING:
             RUNNING = True
             try:
+                logger.info('Collecting logs')
                 collect_metrics()
+                logger.warning('Collecting logs')
+                logger.exception('Collecting logs')
                 RUNNING = False
             except requests.exceptions.ConnectTimeout as error:
-                print(f'Connection timed out: {error}')
+                logger.warning('Connection timed out: %s', error)
                 RUNNING = False
             except requests.exceptions.ConnectionError as error:
-                print(f'Could not connect to host: {error}')
+                logger.warning('Could not connect to host: %s', error)
                 RUNNING = False
             except requests.exceptions.InvalidURL as error:
-                print(f'Check environment variables and ensure a valid host is being set.: {error}')
+                logger.exception('Check environment variables and ensure a valid host is being set.: %s', error)
                 break
             except Exception as error:  # pylint: disable=broad-except
-                print(f'ERROR: {error}')
+                logger.exception('ERROR: %s', error)
                 break
         time.sleep(60.0 - ((time.time() - STARTTIME) % 60.0))
