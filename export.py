@@ -3,6 +3,7 @@
 import os
 import time
 import requests
+from requests.exceptions import ConnectTimeout
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
@@ -75,7 +76,10 @@ if __name__ == '__main__':
             try:
                 collect_metrics()
                 RUNNING = False
-            except Exception as error:
+            except ConnectTimeout as error:
+                print(f'Connection timed out: {error}')
+                RUNNING = False
+            except Exception as error:  # pylint: disable=broad-except
                 if 'No host supplied' in str(error):
                     print(f'ERROR: {error}')
                     print(
