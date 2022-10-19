@@ -66,7 +66,10 @@ class InfluxDB:
 
 def collect_metrics():
     """Calls write_to_influxdb."""
+    logger = logging.getLogger(__name__)
+    logger.debug('Collecting metrics...')
     return InfluxDB().write_to_influxdb()
+
 
 
 if __name__ == '__main__':
@@ -82,10 +85,7 @@ if __name__ == '__main__':
         if not RUNNING:
             RUNNING = True
             try:
-                logger.info('Collecting logs')
                 collect_metrics()
-                logger.warning('Collecting logs')
-                logger.exception('Collecting logs')
                 RUNNING = False
             except requests.exceptions.ConnectTimeout as error:
                 logger.warning('Connection timed out: %s', error)
