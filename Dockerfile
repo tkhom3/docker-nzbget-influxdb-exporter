@@ -30,8 +30,9 @@ WORKDIR $HOME
 
 COPY --chown=$USER:$GROUP requirements.txt .
 COPY --chown=$USER:$GROUP export.py .
+COPY --chown=$USER:$GROUP logging.conf .
 
-RUN chmod 400 requirements.txt && \
+RUN chmod 400 requirements.txt logging.conf && \
     chmod 500 export.py
 
 USER $USER
