@@ -1,4 +1,4 @@
-FROM python:3.12.0a3
+FROM python:3.12.0a4
 
 ARG USER=user
 ARG GROUP=$USER
