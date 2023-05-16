@@ -1,0 +1,13 @@
+name: Build and Deploy Image
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  scan-with-trivy:
+    uses: tkhom3/gha-workflows/.github/workflows/scan-with-trivy.yml@main
+  build-and-push-image:
+    uses: tkhom3/gha-workflows/.github/workflows/build-and-push-image.yml@main
+    secrets: inherit

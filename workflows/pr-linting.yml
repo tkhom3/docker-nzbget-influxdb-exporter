@@ -1,0 +1,8 @@
+name: Linting
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+
+jobs:
+  check-for-CRLF:
+    uses: tkhom3/gha-workflows/.github/workflows/linting-pr.yml@main

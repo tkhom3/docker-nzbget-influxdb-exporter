@@ -1,0 +1,10 @@
+name: Security Scans
+
+on:
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  scan-with-trivy:
+    uses: tkhom3/gha-workflows/.github/workflows/scan-with-trivy-pr.yml@main
